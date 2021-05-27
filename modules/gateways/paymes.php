@@ -26,6 +26,16 @@ function paymes_config()
             'Default' => '',
             'Description' => 'paym.es\'in verdiği size özel kodu (Secret Key) buraya girin',
         ),
+	'useInvoiceAmountAsPaid' => array(
+            'FriendlyName' => 'Fatura tutarını ödenen tutar olarak kullan',
+            'Type' => 'yesno',
+            'Description' => 'Bunu yalnızca varsayılan para biriminiz TL değilken ve ödenen faturada tutar uyuşmazlığı sorunuyla karşılaşırsanız kullanın, bu seçenek, ödenen tutar olarak fatura tutarını kullanır (önerilen ayar: kapalı)',
+        ),
+        'tryToConvertCurrencyBack' => array(
+            'FriendlyName' => 'Sanal Pos\'tan gelen tutarı dönüştür',
+            'Type' => 'yesno',
+            'Description' => 'Bunu yalnızca varsayılan para biriniz TL değilken ve ödenen faturada tutar uyuşmazlığı sorunuyla karşılaşırsanız kullanın, bu seçenek, sanal pos\'tan gelen tutarı orijinal fatura para birimi tutarına geri çevirir. (önerilen ayar: kapalı)',
+        ),
     );
 }
 
@@ -58,12 +68,14 @@ function paymes_3dsecure($params)
     $city = $params['clientdetails']['city'];
     $country = $params['clientdetails']['country'];
     $phone = $params['clientdetails']['phonenumber'];
-	$ip = json_decode($params['clientdetails']['model'], true)['ip'];
+    $ip = json_decode($params['clientdetails']['model'], true)['ip'];
 
     // Sistem parametreleri
     $companyName = $params['companyname'];
     $moduleName = $params['paymentmethod'];
     $langPayNow = $params['langpaynow'];
+    $useInvoiceAmountAsPaid = $params['useInvoiceAmountAsPaid'];
+    $tryToConvertCurrencyBack = $params['tryToConvertCurrencyBack'];
 
 	if(!empty($address2)) {
 		$address1 .= " " . $address2;
